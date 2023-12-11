@@ -11,6 +11,7 @@
 #include "nvs_flash.h"
 #include "intr_types.h"
 #include "driver/spi_master.h"
+#include "driver/gpio.h"
 
 
 static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data);
@@ -47,7 +48,8 @@ uint8_t tx_buffer[300] ={0x00,};
 
 //All FRERTOS tasks running on core 0 --> configured in menu config
 void app_main(void)
-{
+{   
+    ESP_ERROR_CHECK(gpio_install_isr_service(0));
     configure_wifi();
     config_spi();
     while(1){//send 300 bytes via spi every 100 ms
